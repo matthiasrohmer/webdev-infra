@@ -13,7 +13,6 @@ on:
         default: false
       web-dev-commit:
         description: 'GoogleChrome/web.dev Commit'
-        required: true
         default: ''
       dcc:
         type: boolean 
@@ -22,7 +21,6 @@ on:
         default: false
       dcc-commit:
         description: 'GoogleChrome/developer.chrome.com Commit'
-        required: true
         default: ''
 
 jobs:
