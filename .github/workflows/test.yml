@@ -68,8 +68,8 @@ jobs:
 
       - name: Building site
         env:
-          # Increase memory limit as a full build requires around 4GB
-          NODE_OPTIONS: --max_old_space_size=4096
+          # Increase memory limit as a full build requires around 8GB
+          NODE_OPTIONS: --max_old_space_size=8192
           ELEVENTY_ENV: prod
           ELEVENTY_INCLUDE_TRANSLATED: true
         run: |
