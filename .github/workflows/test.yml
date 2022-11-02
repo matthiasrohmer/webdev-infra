@@ -2,8 +2,8 @@ name: Test
 on: pull_request
 
 jobs:
-  test:
-    name: Test
+  unit:
+    name: Unit tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -11,9 +11,94 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 'v16.14.2'
+          node-version: 16
           cache: 'npm'
       - name: Install
         run: npm ci
       - name: Test
         run: npm test
+  web-dev:
+    needs: unit
+    name: "Integration: web.dev"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repository
+        uses: actions/checkout@v3
+        repository: GoogleChrome/web.dev
+
+      - name: Setting up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          node-version: 16
+
+      - name: Installing Node.js packages
+        run: npm ci
+
+      # Overwrite published webdev-infra package with the commit state
+      - name: Cloning repository
+        uses: actions/checkout@v3
+        path: node_modules/webdev-infra
+
+      - name: Building site
+        env:
+          # Increase memory limit as a full build requires around 4GB
+          NODE_OPTIONS: --max_old_space_size=4096
+          ELEVENTY_ENV: prod
+          ELEVENTY_INCLUDE_TRANSLATED: true
+        run: |
+          npm run build
+
+      - name: Packing up built files
+        run: |
+          tar cfj dist.tar.gz ./dist
+
+      - name: Storing build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-dev-${{ github.run_id }}
+          path: dist.tar.gz
+          if-no-files-found: error
+
+  dcc:
+    needs: unit
+    name: "Integration: developer.chrome.com"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloning repository
+        uses: actions/checkout@v3
+        repository: GoogleChrome/developer.chrome.com
+
+      - name: Setting up Node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: npm
+          node-version: 16
+
+      - name: Installing Node.js packages
+        run: npm ci
+
+      # Overwrite published webdev-infra package with the commit state
+      - name: Cloning repository
+        uses: actions/checkout@v3
+        path: node_modules/webdev-infra
+
+      - name: Building site
+        env:
+          # Increase memory limit as a full build requires around 4GB
+          NODE_OPTIONS: --max_old_space_size=4096
+          ELEVENTY_ENV: prod
+          ELEVENTY_INCLUDE_TRANSLATED: true
+        run: |
+          npm run production
+
+      - name: Packing up built files
+        run: |
+          tar cfj dist.tar.gz ./dist
+
+      - name: Storing build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dcc-${{ github.run_id }}
+          path: dist.tar.gz
+          if-no-files-found: error
