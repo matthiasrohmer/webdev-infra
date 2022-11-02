@@ -47,8 +47,9 @@ jobs:
     steps:
       - name: Cloning repository
         uses: actions/checkout@v3
-        repository: GoogleChrome/web.dev
-        ref: '${{ inputs.web-dev-commit }}'
+        with:
+          repository: GoogleChrome/web.dev
+          ref: '${{ inputs.web-dev-commit }}'
       
       - name: Setting up Node.js
         uses: actions/setup-node@v3
@@ -62,7 +63,8 @@ jobs:
       # Overwrite published webdev-infra package with the commit state
       - name: Cloning repository
         uses: actions/checkout@v3
-        path: node_modules/webdev-infra
+        with:
+          path: node_modules/webdev-infra
 
       - name: Building site
         env:
@@ -92,8 +94,9 @@ jobs:
     steps:
       - name: Cloning repository
         uses: actions/checkout@v3
-        repository: GoogleChrome/developer.chrome.com
-        ref: '${{ inputs.dcc-commit }}'
+        with:
+          repository: GoogleChrome/developer.chrome.com
+          ref: '${{ inputs.dcc-commit }}'
       
       - name: Setting up Node.js
         uses: actions/setup-node@v3
@@ -107,7 +110,8 @@ jobs:
       # Overwrite published webdev-infra package with the commit state
       - name: Cloning repository
         uses: actions/checkout@v3
-        path: node_modules/webdev-infra
+        with:
+          path: node_modules/webdev-infra
 
       - name: Building site
         env:
