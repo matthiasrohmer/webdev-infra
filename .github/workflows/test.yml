@@ -13,7 +13,6 @@ on:
         default: false
       web-dev-commit:
         description: 'GoogleChrome/web.dev Commit'
-        required: true
         default: ''
       dcc:
         type: boolean 
@@ -22,7 +21,6 @@ on:
         default: false
       dcc-commit:
         description: 'GoogleChrome/developer.chrome.com Commit'
-        required: true
         default: ''
 
 jobs:
@@ -49,8 +47,9 @@ jobs:
     steps:
       - name: Cloning repository
         uses: actions/checkout@v3
-        repository: GoogleChrome/web.dev
-        ref: '${{ inputs.web-dev-commit }}'
+        with:
+          repository: GoogleChrome/web.dev
+          ref: '${{ inputs.web-dev-commit }}'
       
       - name: Setting up Node.js
         uses: actions/setup-node@v3
@@ -64,12 +63,13 @@ jobs:
       # Overwrite published webdev-infra package with the commit state
       - name: Cloning repository
         uses: actions/checkout@v3
-        path: node_modules/webdev-infra
+        with:
+          path: node_modules/webdev-infra
 
       - name: Building site
         env:
-          # Increase memory limit as a full build requires around 4GB
-          NODE_OPTIONS: --max_old_space_size=4096
+          # Increase memory limit as a full build requires around 8GB
+          NODE_OPTIONS: --max_old_space_size=8192
           ELEVENTY_ENV: prod
           ELEVENTY_INCLUDE_TRANSLATED: true
         run: |
@@ -94,8 +94,9 @@ jobs:
     steps:
       - name: Cloning repository
         uses: actions/checkout@v3
-        repository: GoogleChrome/developer.chrome.com
-        ref: '${{ inputs.dcc-commit }}'
+        with:
+          repository: GoogleChrome/developer.chrome.com
+          ref: '${{ inputs.dcc-commit }}'
       
       - name: Setting up Node.js
         uses: actions/setup-node@v3
@@ -109,7 +110,8 @@ jobs:
       # Overwrite published webdev-infra package with the commit state
       - name: Cloning repository
         uses: actions/checkout@v3
-        path: node_modules/webdev-infra
+        with:
+          path: node_modules/webdev-infra
 
       - name: Building site
         env:
