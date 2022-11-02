@@ -47,7 +47,8 @@ jobs:
       - name: Cloning repository
         uses: actions/checkout@v3
         repository: GoogleChrome/web.dev
-
+        ref: '${{ inputs.web-dev-commit }}'
+      
       - name: Setting up Node.js
         uses: actions/setup-node@v3
         with:
@@ -91,7 +92,8 @@ jobs:
       - name: Cloning repository
         uses: actions/checkout@v3
         repository: GoogleChrome/developer.chrome.com
-
+        ref: '${{ inputs.dcc-commit }}'
+      
       - name: Setting up Node.js
         uses: actions/setup-node@v3
         with:
