@@ -73,7 +73,8 @@ jobs:
           ELEVENTY_ENV: prod
           ELEVENTY_INCLUDE_TRANSLATED: true
         run: |
-          npm run build
+          npm run rollup
+          npx eleventy
 
       - name: Packing up built files
         run: |
