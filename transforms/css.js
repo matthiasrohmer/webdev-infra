@@ -56,6 +56,7 @@ class CssTransform {
    * and reading all JS files upfront
    */
   init() {
+    console.log('[CssTransform] Inited.');
     const work = [this._getCss(), this._getJs()];
     return Promise.all(work);
   }

@@ -73,6 +73,8 @@ jobs:
           ELEVENTY_ENV: prod
           ELEVENTY_INCLUDE_TRANSLATED: true
         run: |
+          npm run gulp
+          npm run ignore
           npm run rollup
           npx eleventy
 
@@ -117,8 +119,7 @@ jobs:
       - name: Building site
         env:
           # Increase memory limit as a full build requires around 4GB
-          NODE_OPTIONS: --max_old_space_size=4096
-          ELEVENTY_ENV: prod
+          NODE_OPTIONS: --max_old_space_size=12288
           ELEVENTY_INCLUDE_TRANSLATED: true
         run: |
           npm run production
